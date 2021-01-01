@@ -124,6 +124,8 @@ if (window) {
   window.x_spreadsheet.locale = (lang, message) => locale(lang, message);
 }
 
+// 修复cocos creator编辑器内部模块样式
+exports.x_spreadsheet = spreadsheet;
 export default Spreadsheet;
 export {
   spreadsheet,

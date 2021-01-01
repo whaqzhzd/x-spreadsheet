@@ -564,7 +564,7 @@ function sortFilterChange(ci, order, operator, value) {
   sheetReset.call(this);
 }
 
-function sheetInitEvents() {
+function sheetInitEvents(options) {
   const {
     selector,
     overlayerEl,
@@ -689,7 +689,8 @@ function sheetInitEvents() {
   });
 
   bind(window, 'click', (evt) => {
-    this.focusing = overlayerEl.contains(evt.target);
+    // 修复在cocos creator编辑器里面focusing总是为false的bug
+    this.focusing = overlayerEl.contains(evt.target) || document.contains(evt.target);
   });
 
   bind(window, 'paste', (evt) => {
