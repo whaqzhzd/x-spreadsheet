@@ -108,16 +108,23 @@ function inputEventHandler(evt) {
 function setTextareaRange(position) {
   const { el } = this.textEl;
   setTimeout(() => {
-    el.focus();
+    // el.focus();
+    this.editor.setValue(this.inputText);
+    this.editor.focus();
     el.setSelectionRange(position, position);
   }, 0);
 }
 
 function setText(text, position) {
-  const { textEl, textlineEl } = this;
+  const { textEl, textlineEl, areaEl } = this;
   // firefox bug
-  textEl.el.blur();
-
+  // textEl.el.blur();
+  if (!this.editor) {
+    areaEl.el.style.width = "300px";
+    areaEl.el.style.height = "200px";
+    this.editor = create_editor(areaEl.el, text);
+    global.editor = this.editor;
+  }
   textEl.val(text);
   textlineEl.html(text);
   setTextareaRange.call(this, position);
@@ -176,14 +183,14 @@ export default class Editor {
       .children(
         this.textEl = h('textarea', '')
           .on('input', evt => inputEventHandler.call(this, evt))
-          .on('paste.stop', () => {})
+          .on('paste.stop', () => { })
           .on('keydown', evt => keydownEventHandler.call(this, evt)),
         this.textlineEl = h('div', 'textline'),
         this.suggest.el,
         this.datepicker.el,
       )
-      .on('mousemove.stop', () => {})
-      .on('mousedown.stop', () => {});
+      .on('mousemove.stop', () => { })
+      .on('mousedown.stop', () => { });
     this.el = h('div', `${cssPrefix}-editor`)
       .child(this.areaEl).hide();
     this.suggest.bindInputEvents(this.textEl);
@@ -192,7 +199,7 @@ export default class Editor {
     this.freeze = { w: 0, h: 0 };
     this.cell = null;
     this.inputText = '';
-    this.change = () => {};
+    this.change = () => { };
   }
 
   setFreezeLengths(width, height) {
@@ -204,7 +211,8 @@ export default class Editor {
     // const { cell } = this;
     // const cellText = (cell && cell.text) || '';
     if (this.inputText !== '') {
-      this.change('finished', this.inputText);
+      //this.inputText
+      this.change('finished', editor.getValue());
     }
     this.cell = null;
     this.areaOffset = null;
