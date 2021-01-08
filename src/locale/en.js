@@ -43,6 +43,8 @@ export default {
     cellnonprintable: 'Disable export',
     celleditable: 'Enable editing',
     cellnoneditable: 'Disable editing',
+    cellmonacoeditable: 'Enable monaco editing',
+    cellnonmonacoeditable: 'Disable monaco editing',
   },
   print: {
     size: 'Paper size',

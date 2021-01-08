@@ -378,6 +378,23 @@ class Draw {
     ctx.restore();
   }
 
+  monaco(box) {
+    const { ctx } = this;
+    let { x, y, width } = box;
+    const sx = x + width - 1;
+    y=y+18;
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(npx(sx), npx(y - 1));
+    ctx.lineTo(npx(sx- 8), npx(y - 1));
+    ctx.lineTo(npx(sx ), npx(y + 8));
+    ctx.closePath();
+    ctx.fillStyle = 'rgb(0,' + 125 + ',' +
+                         85 + ')';
+    ctx.fill();
+    ctx.restore();
+  }
+
   rect(box, dtextcb) {
     const { ctx } = this;
     const {

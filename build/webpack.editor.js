@@ -30,9 +30,8 @@ module.exports = {
             const p = path.join(__dirname, "../dist/app.js");
             let app = fs.readFileSync(p).toString();
             app = app.replace('return o.p+""+e+".app.js"', 'return global.app_path + "/" + e + ".app.js"');
+            app = app.replace('i.p+"223490291528837216424bf892a36810.ttf','global.ttf_path + "223490291528837216424bf892a36810.ttf');
             fs.writeFileSync(p, app);
-          } else {
-
           }
         });
       }

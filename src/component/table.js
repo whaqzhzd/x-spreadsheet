@@ -64,6 +64,11 @@ export function renderCell(draw, data, rindex, cindex, yoffset = 0) {
     frozen = true;
   }
 
+  let monaco = false;
+  if ("monaco" in cell && cell.monaco === true) {
+    monaco = true;
+  }
+
   const style = data.getCellStyleOrDefault(nrindex, cindex);
   const dbox = getDrawBox(data, rindex, cindex, yoffset);
   dbox.bgcolor = style.bgcolor;
@@ -75,7 +80,7 @@ export function renderCell(draw, data, rindex, cindex, yoffset = 0) {
   draw.rect(dbox, () => {
     // render text
     let cellText = "";
-    if(!data.settings.evalPaused) {
+    if (!data.settings.evalPaused) {
       cellText = _cell.render(cell.text || '', formulam, (y, x) => (data.getCellTextOrDefault(x, y)));
     } else {
       cellText = cell.text || '';
@@ -103,6 +108,9 @@ export function renderCell(draw, data, rindex, cindex, yoffset = 0) {
     }
     if (frozen) {
       draw.frozen(dbox);
+    }
+    if (monaco) { 
+      draw.monaco(dbox);
     }
   });
 }

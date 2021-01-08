@@ -22,7 +22,7 @@ function create_editor(ele, value = "") {
     return monaco.editor.create(ele, {
         value: value,
         language: "javascript",
-
+        fontFamily:"consolas",
         glyphMargin: false,
         folding: false,
         lineNumbers: "off",

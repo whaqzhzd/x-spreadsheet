@@ -107,24 +107,31 @@ function inputEventHandler(evt) {
 
 function setTextareaRange(position) {
   const { el } = this.textEl;
+
   setTimeout(() => {
-    // el.focus();
-    this.editor.setValue(this.inputText);
-    this.editor.focus();
+    if (this.hasMonaco(this.cell)) {
+      global.editor.focus();
+    } else {
+      el.focus();
+    }
     el.setSelectionRange(position, position);
   }, 0);
 }
 
 function setText(text, position) {
   const { textEl, textlineEl, areaEl } = this;
-  // firefox bug
-  // textEl.el.blur();
-  if (!this.editor) {
-    areaEl.el.style.width = "300px";
-    areaEl.el.style.height = "200px";
-    this.editor = create_editor(areaEl.el, text);
-    global.editor = this.editor;
+
+  if (!this.hasMonaco(this.cell)) {
+    // firefox bug
+    textEl.el.blur();
   }
+
+  if (this.hasMonaco(this.cell)) {
+    let offset = areaEl.el.getBoundingClientRect();
+    global.areaEl1.el.style.left = offset.left + "px";
+    global.areaEl1.el.style.top = (offset.top + 23) + "px";
+  }
+
   textEl.val(text);
   textlineEl.html(text);
   setTextareaRange.call(this, position);
@@ -211,13 +218,17 @@ export default class Editor {
     // const { cell } = this;
     // const cellText = (cell && cell.text) || '';
     if (this.inputText !== '') {
-      //this.inputText
-      this.change('finished', editor.getValue());
+      if (this.hasMonaco(this.cell)) {
+        this.change('finished', editor.getValue());
+      } else {
+        this.change('finished', this.inputText);
+      }
     }
     this.cell = null;
     this.areaOffset = null;
     this.inputText = '';
     this.el.hide();
+    global.areaEl1 && global.areaEl1.hide();
     this.textEl.val('');
     this.textlineEl.html('');
     resetSuggestItems.call(this);
@@ -256,12 +267,36 @@ export default class Editor {
     }
   }
 
+  hasMonaco(cell) {
+    return cell && "monaco" in cell && cell.monaco;
+  }
+
   setCell(cell, validator) {
     // console.log('::', validator);
     const { el, datepicker, suggest } = this;
-    el.show();
+
     this.cell = cell;
     const text = (cell && cell.text) || '';
+
+    if (this.hasMonaco(cell)) {
+      if (!global.editor) {
+        let e1 = global.areaEl1 = h('div', ``);
+        e1.css("position", "absolute");
+        e1.css("height", "200px");
+        e1.css("width", "200px");
+        e1.css("margin", "auto");
+        document.body.appendChild(e1.el);
+        global.editor = create_editor(e1.el, text);
+
+        global.editor.setValue(text);
+      }
+    }
+    
+    el.show();
+    if (this.hasMonaco(cell)) {
+      global.areaEl1 && global.areaEl1.show();
+    }
+
     this.setText(text);
 
     this.validator = validator;

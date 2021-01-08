@@ -517,6 +517,10 @@ function insertDeleteRowColumn(type) {
     data.setSelectedCellAttr('editable', true);
   } else if (type === 'cell-non-editable') {
     data.setSelectedCellAttr('editable', false);
+  } else if (type === 'cell-monaco-editable') {
+    data.setSelectedCellAttr('monaco', true);
+  } else if (type === 'cell-non-monaco-editable') {
+    data.setSelectedCellAttr('monaco', false);
   }
   clearClipboard.call(this);
   sheetReset.call(this);
@@ -694,7 +698,7 @@ function sheetInitEvents(options) {
   });
 
   bind(window, 'paste', (evt) => {
-    if(!this.focusing) return;
+    if (!this.focusing) return;
     paste.call(this, 'all', evt);
     evt.preventDefault();
   });

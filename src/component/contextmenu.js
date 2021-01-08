@@ -25,6 +25,10 @@ const menuItems = [
   { key: 'divider' },
   { key: 'cell-editable', title: tf('contextmenu.celleditable') },
   { key: 'cell-non-editable', title: tf('contextmenu.cellnoneditable') },
+  // 开启monaco 编辑器编辑
+  { key: 'cell-monaco-editable', title: tf('contextmenu.cellmonacoeditable') },
+  // 关闭monaco 编辑器编辑
+  { key: 'cell-non-monaco-editable', title: tf('contextmenu.cellnonmonacoeditable') },
 ];
 
 function buildMenuItem(item) {
